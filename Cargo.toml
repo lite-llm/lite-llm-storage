@@ -1,0 +1,10 @@
+[package]
+name = "lite-llm-storage"
+version = "0.1.0"
+edition = "2021"
+description = "Lite LLM storage and memory hierarchy skeleton."
+license-file = "LICENSE"
+readme = "README.md"
+rust-version = "1.70"
+
+[dependencies]
