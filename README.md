@@ -1,20 +1,36 @@
 # lite-llm-storage
 
-Independent Rust crate skeleton for Lite LLM: Storage and Memory Hierarchy (Spec 021-030).
+Storage and checkpoint crate for Lite LLM (`SPEC-021` to `SPEC-030`).
 
-## Purpose
-This crate provides compile-ready interfaces and placeholder implementations for its spec layer.
+## Scope
+Implements deterministic storage semantics:
 
-## Structure
-- src/lib.rs: module exports and public API surface
-- src/*.rs: layer-specific primitives and traits
+- tier placement policy (`hot`/`warm`/`cold`/`archive`)
+- hot-cache management and deterministic eviction
+- lazy expert loading contract
+- checkpoint manifest schema and shard hash verification hooks
+- snapshot commit/restore atomicity and restore validation
 
-## Build
-`ash
-cargo check
-`
+## Modules
+- `src/placement.rs`: adaptive placement policy and tier planning
+- `src/cache.rs`: hot cache, lazy loading, deterministic eviction strategy
+- `src/checkpoint.rs`: checkpoint manifest model and canonical codec
+- `src/snapshot.rs`: snapshot repository, staged commit and restore
+- `src/types.rs`: shared key/type contracts
+- `src/error.rs`: storage error model
 
-## Notes
-- This crate is intentionally standalone.
-- Runtime behavior is scaffolded, not production-complete.
-- License for this crate is in LICENSE.
+## Build and Test
+```bash
+cargo fmt
+cargo test
+```
+
+## Documentation
+- System docs: `../lite-llm-docs/README.md`
+- Recovery docs: `../lite-llm-docs/recovery/recovery-playbook.md`
+
+## Changelog
+See `CHANGELOG.md`.
+
+## License
+See `LICENSE`.
