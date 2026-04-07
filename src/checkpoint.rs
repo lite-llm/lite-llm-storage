@@ -509,10 +509,9 @@ impl CheckpointManifest {
                     } else {
                         let mut parsed = Vec::new();
                         for dim in shape_raw.split(',') {
-                            parsed.push(
-                                dim.parse::<usize>()
-                                    .map_err(|_| StorageError::ParseError("invalid shape dimension"))?,
-                            );
+                            parsed.push(dim.parse::<usize>().map_err(|_| {
+                                StorageError::ParseError("invalid shape dimension")
+                            })?);
                         }
                         parsed
                     };
@@ -729,8 +728,8 @@ mod tests {
     use std::collections::BTreeMap;
 
     use super::{
-        fnv64_hex, CheckpointManifest, Fnv64HashVerifier, OptimStateRef, RouterSeedRef, RouterStateRef,
-        ShardDescriptor, ShardType, TierManifestEntry,
+        fnv64_hex, CheckpointManifest, Fnv64HashVerifier, OptimStateRef, RouterSeedRef,
+        RouterStateRef, ShardDescriptor, ShardType, TierManifestEntry,
     };
     use crate::placement::{PlacementPolicyKind, StorageTier};
     use crate::types::ExpertKey;
@@ -808,8 +807,8 @@ mod tests {
         let serialized = manifest
             .to_canonical_string()
             .expect("serialization should succeed");
-        let parsed = CheckpointManifest::from_canonical_string(&serialized)
-            .expect("parsing should succeed");
+        let parsed =
+            CheckpointManifest::from_canonical_string(&serialized).expect("parsing should succeed");
 
         assert_eq!(manifest, parsed);
     }
@@ -820,7 +819,10 @@ mod tests {
         let verifier = Fnv64HashVerifier;
 
         let mut shard_bytes = BTreeMap::new();
-        shard_bytes.insert("dense/l0/attention_q_0.bin".to_owned(), b"dense-shard".to_vec());
+        shard_bytes.insert(
+            "dense/l0/attention_q_0.bin".to_owned(),
+            b"dense-shard".to_vec(),
+        );
         shard_bytes.insert("experts/t2/g0/e1.bin".to_owned(), b"CORRUPTED".to_vec());
 
         assert!(manifest.verify_shards(&shard_bytes, &verifier).is_err());

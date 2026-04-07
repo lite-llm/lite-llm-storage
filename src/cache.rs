@@ -239,7 +239,10 @@ impl HotExpertCache {
                 break;
             }
 
-            let entry = self.entries.remove(&key).ok_or(StorageError::NoEvictionCandidate)?;
+            let entry = self
+                .entries
+                .remove(&key)
+                .ok_or(StorageError::NoEvictionCandidate)?;
             let size = entry.size_bytes();
             self.used_bytes = self.used_bytes.saturating_sub(size);
             bytes_needed = bytes_needed.saturating_sub(size);
@@ -452,5 +455,3 @@ mod tests {
         assert_eq!(outcomes[0].source, LoadSource::BackingStore);
     }
 }
-
-

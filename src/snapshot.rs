@@ -64,7 +64,8 @@ impl SnapshotRepository {
 
         fs::create_dir_all(&temp_dir)?;
 
-        let result = self.write_snapshot_contents(&temp_dir, manifest, shard_bytes, verifier)
+        let result = self
+            .write_snapshot_contents(&temp_dir, manifest, shard_bytes, verifier)
             .and_then(|_| {
                 if final_dir.exists() {
                     fs::remove_dir_all(&final_dir)?;
@@ -362,7 +363,12 @@ mod tests {
         repo.commit_snapshot("snap-2", &manifest, &shards, &verifier)
             .expect("snapshot commit should succeed");
 
-        let corrupted = root.join("snap-2").join("experts").join("t2").join("g0").join("e1.bin");
+        let corrupted = root
+            .join("snap-2")
+            .join("experts")
+            .join("t2")
+            .join("g0")
+            .join("e1.bin");
         std::fs::write(corrupted, b"CORRUPTED").expect("must write corruption");
 
         let restore = repo.restore_snapshot("snap-2", None, &verifier);

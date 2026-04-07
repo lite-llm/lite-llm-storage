@@ -9,7 +9,11 @@ pub struct ExpertKey {
 
 impl ExpertKey {
     pub const fn new(tier: TierId, group: u32, expert: u32) -> Self {
-        Self { tier, group, expert }
+        Self {
+            tier,
+            group,
+            expert,
+        }
     }
 
     pub fn as_tuple(self) -> (TierId, u32, u32) {
