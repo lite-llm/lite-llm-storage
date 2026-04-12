@@ -86,7 +86,7 @@ impl HotExpertCache {
     pub fn new(capacity_bytes: u64, seed: u64) -> StorageResult<Self> {
         if capacity_bytes == 0 {
             return Err(StorageError::InvalidConfig(
-                "cache capacity must be greater than zero",
+                "cache capacity must be greater than zero".to_owned(),
             ));
         }
 

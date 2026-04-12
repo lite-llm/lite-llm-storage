@@ -36,7 +36,7 @@ impl SnapshotRepository {
         verifier: &dyn ShardHashVerifier,
     ) -> StorageResult<()> {
         if snapshot_id.trim().is_empty() {
-            return Err(StorageError::InvalidConfig("snapshot_id must not be empty"));
+            return Err(StorageError::InvalidConfig("snapshot_id must not be empty".to_owned()));
         }
 
         manifest.validate()?;

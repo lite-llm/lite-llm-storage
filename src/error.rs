@@ -3,7 +3,7 @@ use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StorageError {
-    InvalidConfig(&'static str),
+    InvalidConfig(String),
     InvalidManifest(&'static str),
     ParseError(&'static str),
     TierUnknown(u16),
@@ -19,6 +19,7 @@ pub enum StorageError {
     },
     NoEvictionCandidate,
     Io(String),
+    IoError(String),
     LockHeld,
     SnapshotNotFound(String),
     CorruptedSnapshot(&'static str),
@@ -51,6 +52,7 @@ impl fmt::Display for StorageError {
             ),
             Self::NoEvictionCandidate => write!(f, "no eligible eviction candidate"),
             Self::Io(msg) => write!(f, "io error: {msg}"),
+            Self::IoError(msg) => write!(f, "io error: {msg}"),
             Self::LockHeld => write!(f, "snapshot lock is currently held"),
             Self::SnapshotNotFound(id) => write!(f, "snapshot not found: {id}"),
             Self::CorruptedSnapshot(msg) => write!(f, "corrupted snapshot: {msg}"),
