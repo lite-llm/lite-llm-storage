@@ -141,6 +141,7 @@ impl AsyncBackend for FilesystemBackend {
 /// S3-compatible cloud storage backend (AWS S3, GCS, MinIO, etc.).
 ///
 /// Uses the AWS SDK for Rust to interact with S3-compatible APIs.
+/// Requires the `cloud-backends` feature flag to be enabled.
 #[cfg(feature = "cloud-backends")]
 #[derive(Clone)]
 pub struct S3Backend {
@@ -286,6 +287,9 @@ impl AsyncBackend for S3Backend {
 }
 
 /// Storage configuration for selecting the backend type.
+///
+/// Supports filesystem, S3, GCS, and MinIO backends.
+/// Can be serialized to JSON for configuration files.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StorageBackendConfig {
     /// Backend type: "filesystem", "s3", "gcs", "minio".
@@ -331,6 +335,10 @@ impl StorageBackendConfig {
 }
 
 /// Build an `AsyncBackend` from configuration.
+///
+/// Dispatches to the appropriate backend implementation based on
+/// the `backend_type` field. Returns an error for unknown types
+/// or when cloud backends are not enabled.
 pub async fn build_backend(config: &StorageBackendConfig) -> StorageResult<Box<dyn AsyncBackend>> {
     match config.backend_type.as_str() {
         "filesystem" => {
