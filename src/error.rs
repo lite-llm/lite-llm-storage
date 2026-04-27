@@ -60,7 +60,11 @@ impl fmt::Display for StorageError {
     }
 }
 
-impl Error for StorageError {}
+impl Error for StorageError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        None
+    }
+}
 
 impl From<std::io::Error> for StorageError {
     fn from(err: std::io::Error) -> Self {
